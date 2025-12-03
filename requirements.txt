@@ -1,0 +1,8 @@
+torch
+torchvision
+torchmetrics==1.4.0
+pyyaml
+tqdm
+matplotlib
+seaborn
+scikit-learn

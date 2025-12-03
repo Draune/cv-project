@@ -1,0 +1,29 @@
+task: cv_classification
+seed: 42
+output_dir: outputs
+
+data:
+  dataset: cifar10          # cifar10 | imagefolder
+  root: ./data
+  img_size: 224
+  batch_size: 64
+  num_workers: 2
+  val_split: 0.1            # only used for imagefolder
+
+model:
+  arch: resnet18
+  pretrained: true
+  freeze_backbone: false    # true = train only final layer
+
+train:
+  epochs: 1
+  optimizer: adamw          # adamw | sgd
+  lr: 1.0e-3
+  weight_decay: 1.0e-2
+  momentum: 0.9             # only if sgd
+  scheduler: cosine         # cosine | none
+  t_max: 1                  # cosine: number of epochs
+
+early_stopping:
+  patience: 5
+  min_delta: 0.0
