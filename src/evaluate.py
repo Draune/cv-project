@@ -44,7 +44,7 @@ def main(cfg_path, ckpt_path):
     model.to(device).eval()
 
     acc_metric = MulticlassAccuracy(num_classes=num_classes).to(device)
-    cm_metric = ConfusionMatrix(num_classes=num_classes).to(device)
+    cm_metric = ConfusionMatrix(task="multiclass", num_classes=num_classes).to(device)
 
     preds_all, targets_all = [], []
 
