@@ -52,9 +52,8 @@ def plot_validation_loss(output_dir):
     plt.grid(True, linestyle='--', alpha=0.6)
     plt.xticks(df['epoch'].unique()) # S'assurer que les ticks correspondent aux epochs
     plt.tight_layout()
-
-    # Affichez le graphique
-    plt.show()
+    fig.savefig(output_dir / "train_loss_on_epoch.png", dpi=200)
+    plt.close(fig)
 
 
 def train_one_epoch(model, loader, crit, opt, device):
