@@ -20,6 +20,43 @@ from utils import set_seed, get_device, load_yaml, save_checkpoint, save_json
 from data import build_dataloaders
 from model import build_model
 
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def plot_validation_loss(output_dir):
+    log_path = Path(output_dir) / "log.csv"
+
+    # 1. Vérifiez que le fichier log existe
+    if not log_path.exists():
+        print(f"Erreur : Le fichier de log est introuvable à {log_path}")
+        print("Veuillez d'abord exécuter train.py.")
+        return
+
+    # 2. Lisez le fichier CSV
+    try:
+        # Le fichier log.csv a les colonnes : epoch,train_loss,val_loss,val_acc
+        df = pd.read_csv(log_path)
+    except Exception as e:
+        print(f"Erreur lors de la lecture du CSV : {e}")
+        return
+
+    # 3. Créez le graphique
+    plt.figure(figsize=(10, 6))
+    plt.plot(df['epoch'], df['val_loss'], marker='o', linestyle='-', color='red', label='Perte de Validation (Validation Loss)')
+
+    # Ajoutez des titres et des étiquettes
+    plt.title('Perte de Validation en fonction de l\'Epoch', fontsize=16)
+    plt.xlabel('Epoch', fontsize=14)
+    plt.ylabel('Perte (Loss)', fontsize=14)
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.6)
+    plt.xticks(df['epoch'].unique()) # S'assurer que les ticks correspondent aux epochs
+    plt.tight_layout()
+
+    # Affichez le graphique
+    plt.show()
+
+
 def train_one_epoch(model, loader, crit, opt, device):
     """Run one training pass and return the average loss.
 
@@ -107,6 +144,7 @@ def main(cfg_path):
 
     save_json({"best_val_acc": best_acc, "classes": classes}, out / "metrics.json")
     print(f"Done. Best val acc: {best_acc:.4f}. Checkpoint: {best_path}")
+    plot_validation_loss(out)
 
 if __name__ == "__main__":
     import argparse
